@@ -2,8 +2,14 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// GitHub Pages serves this project at /pain-log/. The build and `vite preview`
+// both need that prefix so preview matches production; only the dev server,
+// which serves from the root, keeps '/'.
+const BASE = '/pain-log/'
+
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command, isPreview }) => ({
+  base: command === 'build' || isPreview ? BASE : '/',
   plugins: [
     react(),
     VitePWA({
@@ -30,4 +36,4 @@ export default defineConfig({
       },
     }),
   ],
-})
+}))

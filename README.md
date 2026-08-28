@@ -136,53 +136,39 @@ Safariで開く必要があります。ChromeなどSafari以外のブラウザ�
 
 ブラウザの制約により、この通知は**アプリを開いたときに条件を満たしていれば表示される**しくみです。アプリを閉じている間に届くわけではない点にご注意ください。確実な通知が必要な場合は、スマホの標準アラーム機能を併用してください。
 
-## インターネットに公開する
+## 公開について
 
-データはすべて端末内に保存されるため、公開してもプライバシー上の問題は生じません。以下のいずれかの方法が使えます。
+**公開URL: https://mhd-apps.github.io/pain-log/**
 
-### Vercel（おすすめ・いちばん簡単）
+GitHub Pagesで公開しています。データはすべて端末内に保存されるため、公開してもプライバシー上の問題は生じません。
 
-1. このプロジェクトをGitHubにアップロードする
-2. [vercel.com](https://vercel.com) にGitHubアカウントでログイン
-3. 「Add New」→「Project」から、該当のリポジトリを選ぶ
-4. Framework Presetが **Vite** になっていることを確認して「Deploy」
+### 更新のしかた
 
-数十秒でURLが発行されます。以降はGitHubに変更を反映するたびに自動で更新されます。
+`main` ブランチに push すると、GitHub Actions が自動でビルドして公開まで行います（`.github/workflows/deploy.yml`）。手動の作業は不要です。
 
-### Netlify
+```bash
+git push
+```
 
-1. プロジェクトをGitHubにアップロードする
-2. [netlify.com](https://netlify.com) にログインし、「Add new site」→「Import an existing project」
-3. リポジトリを選び、以下を設定して「Deploy」
-   - Build command: `npm run build`
-   - Publish directory: `dist`
+進行状況はリポジトリの **Actions** タブで確認できます。1〜2分で反映されます。
 
-GitHubを使わない場合は、`npm run build` で生成された `dist` フォルダを [app.netlify.com/drop](https://app.netlify.com/drop) にドラッグ＆ドロップするだけでも公開できます。
+### サブディレクトリ配信について
 
-### GitHub Pages
-
-GitHub Pagesはリポジトリ名のサブディレクトリ（`https://ユーザー名.github.io/リポジトリ名/`）で公開されるため、`vite.config.ts` に `base` の指定を追加する必要があります。
+GitHub Pagesは `https://mhd-apps.github.io/pain-log/` というサブディレクトリで配信されるため、`vite.config.ts` で `base` を指定しています。
 
 ```ts
-export default defineConfig({
-  base: '/リポジトリ名/',
-  plugins: [ /* ... */ ],
-})
+base: command === 'build' || isPreview ? '/pain-log/' : '/'
 ```
 
-その後、以下でビルドし、`dist` の中身をリポジトリの `gh-pages` ブランチに公開してください。
+`vite preview` も本番と同じサブパスで動くようにしてあるので、`npm run preview` で公開時と同じ状態を手元で確認できます（`http://localhost:4173/pain-log/`）。
 
-```bash
-npm run build
-```
+**リポジトリ名を変えた場合は、この `BASE` の値も合わせて変更してください。** 変えないとアセットが読み込めず真っ白な画面になります。
 
-`gh-pages` パッケージを使うと簡単です。
+### 別のサービスを使う場合
 
-```bash
-npm install -D gh-pages && npx gh-pages -d dist
-```
+Vercel や Netlify はルート配信のため、その場合は `base` の指定を外してください（`base: '/'`）。
 
-※ PWAとして正しく動作させるには **HTTPS** である必要があります。上記3サービスはいずれも自動でHTTPSになります。
+※ PWAとして動作させるには **HTTPS** が必要です。GitHub Pages / Vercel / Netlify はいずれも自動でHTTPSになります。
 
 ## 技術構成
 
