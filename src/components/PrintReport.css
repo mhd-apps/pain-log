@@ -1,0 +1,86 @@
+.print-report {
+  font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  color: #1a1a1a;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.print-report h1 {
+  font-size: 18px;
+  margin: 0 0 2px;
+}
+
+.print-report .print-report__meta {
+  font-size: 11px;
+  color: #444;
+  margin-bottom: 12px;
+}
+
+.print-report .print-report__summary {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.print-report .print-report__summary div {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 12px;
+  text-align: center;
+}
+
+.print-report .print-report__summary .value {
+  font-size: 16px;
+  font-weight: 700;
+  display: block;
+}
+
+.print-report .print-report__section-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 14px 0 6px;
+  border-bottom: 1px solid #999;
+  padding-bottom: 2px;
+}
+
+.print-report .print-heatmaps {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.print-report .print-heatmap {
+  width: 200px;
+}
+
+.print-report .print-heatmap .heatmap__nav {
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.print-report .print-heatmap .heatmap__nav h3 {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.print-report .print-heatmap .heatmap__day {
+  font-size: 9px;
+  border-radius: 4px;
+}
+
+.print-report table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+
+.print-report th,
+.print-report td {
+  border: 1px solid #bbb;
+  padding: 3px 5px;
+  text-align: left;
+}
+
+.print-report th {
+  background: #eee;
+}

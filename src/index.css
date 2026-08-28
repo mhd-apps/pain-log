@@ -1,0 +1,125 @@
+:root {
+  --color-bg: #f5f2ec;
+  --color-surface: #ffffff;
+  --color-surface-alt: #eeeae2;
+  --color-text: #2c2a26;
+  --color-text-muted: #746f66;
+  --color-border: #ddd6ca;
+  --color-accent: #7a9bab;
+  --color-accent-text: #ffffff;
+  --color-danger: #b5564a;
+  --color-success-bg: #e4ede6;
+  --color-success-text: #3f6650;
+
+  color-scheme: light;
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1b1a18;
+    --color-surface: #26241f;
+    --color-surface-alt: #302d27;
+    --color-text: #efe9df;
+    --color-text-muted: #a89e8f;
+    --color-border: #423e36;
+    --color-accent: #8fb0bf;
+    --color-accent-text: #14201f;
+    --color-danger: #d98376;
+    --color-success-bg: #253128;
+    --color-success-text: #a9d3b7;
+
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  overscroll-behavior-y: contain;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
+.app-shell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen-loading {
+  flex: 1;
+  text-align: center;
+  margin-top: 60px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+/* Dimming the whole swatch (background and its label together) keeps the contrast
+   ratio while taking the glare off a dark room at 3am. */
+@media (prefers-color-scheme: dark) {
+  .severity-button,
+  .sheet__severity-button,
+  .record-row__severity,
+  .heatmap__day.has-data {
+    filter: brightness(0.82) saturate(0.92);
+  }
+}
+
+#print-root {
+  display: none;
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-surface: #ffffff;
+    --color-surface-alt: #eeeeee;
+    --color-text: #1a1a1a;
+    --color-text-muted: #555555;
+    --color-border: #bbbbbb;
+    --color-accent: #7a9bab;
+    --color-accent-text: #ffffff;
+  }
+  #root {
+    display: none !important;
+  }
+  #print-root {
+    display: block;
+  }
+  /* The heatmap and severity colors ARE the data here; without this browsers
+     drop every background and the printout becomes unreadable for the doctor. */
+  #print-root,
+  #print-root * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    /* never carry the dark-mode dimming onto paper */
+    filter: none;
+  }
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+}
