@@ -3,6 +3,7 @@ import type { PainRecord, Severity } from '../types'
 import { formatDateTimeJp } from '../utils/date'
 import { severityColor, severityTextColor } from '../utils/severityColor'
 import { DetailForm } from './DetailForm'
+import { TimestampEditor } from './TimestampEditor'
 import './RecordEditSheet.css'
 
 const SEVERITIES: Severity[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -38,6 +39,12 @@ export function RecordEditSheet({ record, onUpdate, onDelete, onClose }: RecordE
             </button>
           ))}
         </div>
+
+        <TimestampEditor
+          title="日時（痛みがあった時刻に直せます）"
+          value={record.timestamp}
+          onChange={(timestamp) => onUpdate({ timestamp })}
+        />
 
         <DetailForm record={record} onUpdate={onUpdate} />
 

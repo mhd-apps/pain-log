@@ -1,0 +1,59 @@
+.timestamp-editor {
+  margin-bottom: 22px;
+}
+
+.timestamp-editor h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin: 0 0 10px;
+}
+
+.timestamp-editor__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.timestamp-editor__presets button {
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.timestamp-editor__presets button:active {
+  background: var(--color-surface-alt);
+}
+
+.timestamp-editor__fields {
+  display: flex;
+  gap: 10px;
+}
+
+.timestamp-editor__fields input {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.timestamp-editor__fields input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.timestamp-editor__note {
+  font-size: 12px;
+  color: var(--color-danger);
+  margin: 8px 0 0;
+  line-height: 1.6;
+}

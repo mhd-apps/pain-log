@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { BackdatedRecordSheet } from '../components/BackdatedRecordSheet'
 import { DetailForm } from '../components/DetailForm'
-import { type RecordPatch, createQuickRecord, updateRecord } from '../db'
+import { type RecordPatch, createQuickRecord, createRecordAt, updateRecord } from '../db'
 import type { PainRecord, Severity } from '../types'
 import { formatDateJp, formatTime } from '../utils/date'
 import { severityColor, severityTextColor } from '../utils/severityColor'
@@ -16,6 +17,7 @@ export function RecordScreen({ onRecordCreated }: RecordScreenProps) {
   const [lastRecord, setLastRecord] = useState<PainRecord | null>(null)
   const [showDetail, setShowDetail] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [showBackdated, setShowBackdated] = useState(false)
 
   async function handleTap(severity: Severity) {
     if (saving) return
@@ -28,6 +30,14 @@ export function RecordScreen({ onRecordCreated }: RecordScreenProps) {
     } finally {
       setSaving(false)
     }
+  }
+
+  async function handleBackdatedSave(severity: Severity, timestamp: number) {
+    const record = await createRecordAt(severity, timestamp)
+    setLastRecord(record)
+    setShowDetail(false)
+    onRecordCreated(record)
+    return record
   }
 
   async function handleDetailUpdate(patch: RecordPatch) {
@@ -62,6 +72,10 @@ export function RecordScreen({ onRecordCreated }: RecordScreenProps) {
         <span>10 = 最悪の痛み</span>
       </div>
 
+      <button type="button" className="backdated-entry-button" onClick={() => setShowBackdated(true)}>
+        さっきの痛みをあとから記録する
+      </button>
+
       {lastRecord && (
         <>
           <div className="confirmation-card">
@@ -91,6 +105,10 @@ export function RecordScreen({ onRecordCreated }: RecordScreenProps) {
 
           <p className="record-again-hint">もう一度記録するには、上の数字をタップしてください</p>
         </>
+      )}
+
+      {showBackdated && (
+        <BackdatedRecordSheet onSave={handleBackdatedSave} onClose={() => setShowBackdated(false)} />
       )}
     </div>
   )

@@ -37,9 +37,18 @@ function newId(): string {
 }
 
 export async function createQuickRecord(severity: PainRecord['severity']): Promise<PainRecord> {
+  return createRecordAt(severity, Date.now())
+}
+
+// Pain often can't be logged while it is happening, so a record may be entered
+// hours later for a time the user recalls.
+export async function createRecordAt(
+  severity: PainRecord['severity'],
+  timestamp: number,
+): Promise<PainRecord> {
   const record: PainRecord = {
     id: newId(),
-    timestamp: Date.now(),
+    timestamp,
     severity,
   }
   const db = await getDb()
@@ -74,7 +83,9 @@ async function applyUpdate(id: string, patch: RecordPatch): Promise<void> {
   const existing = await db.get('records', id)
   if (!existing) return
   const resolvedPatch = typeof patch === 'function' ? patch(existing) : patch
-  await db.put('records', { ...existing, ...resolvedPatch, id: existing.id, timestamp: existing.timestamp })
+  // timestamp is editable: a record entered late needs its time corrected to when
+  // the pain actually happened. Only the id is fixed.
+  await db.put('records', { ...existing, ...resolvedPatch, id: existing.id })
 }
 
 export async function deleteRecord(id: string): Promise<void> {

@@ -21,6 +21,22 @@ export function formatDateTimeJp(timestamp: number): string {
   return `${formatDateJp(timestamp)} ${formatTime(timestamp)}`
 }
 
+// <input type="date"> / <input type="time"> round-trip helpers.
+export function toDateInputValue(timestamp: number): string {
+  return toDateKey(timestamp)
+}
+
+export function toTimeInputValue(timestamp: number): string {
+  return formatTime(timestamp)
+}
+
+export function combineDateTime(dateStr: string, timeStr: string): number {
+  const [y, m, d] = dateStr.split('-').map(Number)
+  const [hh, mm] = timeStr.split(':').map(Number)
+  if ([y, m, d, hh, mm].some(Number.isNaN)) return Number.NaN
+  return new Date(y, m - 1, d, hh, mm, 0, 0).getTime()
+}
+
 export function daysAgo(days: number): number {
   const d = new Date()
   d.setHours(0, 0, 0, 0)

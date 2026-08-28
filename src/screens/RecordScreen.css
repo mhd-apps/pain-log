@@ -58,6 +58,23 @@
   padding: 0 4px;
 }
 
+.backdated-entry-button {
+  margin-top: 16px;
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1.5px dashed var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.backdated-entry-button:active {
+  background: var(--color-surface-alt);
+}
+
 .confirmation-card {
   margin-top: 22px;
   background: var(--color-success-bg);
