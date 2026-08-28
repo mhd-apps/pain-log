@@ -14,12 +14,12 @@ export default defineConfig(({ command, isPreview }) => ({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/icon-192.png', 'icons/icon-512.png'],
+      includeAssets: ['favicon.svg', 'icons/apple-touch-icon.png', 'icons/icon-192.png', 'icons/icon-512.png'],
       manifest: {
         name: '痛み日誌',
         short_name: '痛み日誌',
         description: '痛みの記録を3秒でつける個人用日誌アプリ',
-        theme_color: '#7a9ba8',
+        theme_color: '#8aa8b7',
         background_color: '#f4f1ec',
         display: 'standalone',
         start_url: '.',
