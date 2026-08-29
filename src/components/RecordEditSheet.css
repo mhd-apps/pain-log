@@ -50,11 +50,24 @@
   padding: 4px 8px;
 }
 
+.sheet__severity-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
 .sheet__severity-row {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 6px;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
+}
+
+.sheet__severity-hint {
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  margin: 0 0 20px;
 }
 
 .sheet__severity-button {
@@ -67,8 +80,13 @@
 }
 
 .sheet__severity-button.active {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: 3px solid var(--color-text);
+  outline-offset: -3px;
+}
+
+.sheet__severity-button.inside {
+  outline: 2px dashed var(--color-text);
+  outline-offset: -5px;
 }
 
 .sheet__delete {

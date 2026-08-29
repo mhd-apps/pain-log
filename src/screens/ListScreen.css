@@ -62,6 +62,16 @@
   flex-shrink: 0;
 }
 
+/* A range needs room for "5〜7", so the circle becomes a pill. */
+.record-row__severity.is-range {
+  width: auto;
+  min-width: 58px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+}
+
 .record-row__time {
   font-size: 15px;
   font-weight: 600;

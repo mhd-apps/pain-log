@@ -74,6 +74,9 @@ export function ReviewScreen({ records }: ReviewScreenProps) {
             <div className="stat-tile__label">最大強度</div>
           </div>
         </div>
+        <p className="review-note">
+          ※ 「5〜7」のように幅で記録したものは、最大強度には上限（7）を、平均強度には真ん中の値（6）を使っています。
+        </p>
       </section>
 
       <section className="review-section">

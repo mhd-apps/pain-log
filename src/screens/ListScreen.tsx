@@ -1,7 +1,14 @@
 import { useMemo, useState } from 'react'
 import { RecordEditSheet } from '../components/RecordEditSheet'
 import { type RecordPatch, deleteRecord, updateRecord } from '../db'
-import { DURATION_LABELS, QUALITY_LABELS, hasDetail, type PainRecord } from '../types'
+import {
+  DURATION_LABELS,
+  QUALITY_LABELS,
+  formatSeverity,
+  hasDetail,
+  type PainRecord,
+  severityBounds,
+} from '../types'
 import { formatDateJp, formatTime, toDateKey } from '../utils/date'
 import { severityColor, severityTextColor } from '../utils/severityColor'
 import './ListScreen.css'
@@ -72,10 +79,17 @@ export function ListScreen({ records, onChange }: ListScreenProps) {
             >
               <span className="record-row__time">{formatTime(record.timestamp)}</span>
               <span
-                className="record-row__severity"
-                style={{ background: severityColor(record.severity), color: severityTextColor(record.severity) }}
+                className={`record-row__severity${severityBounds(record).isRange ? ' is-range' : ''}`}
+                style={{
+                  background: severityBounds(record).isRange
+                    ? `linear-gradient(100deg, ${severityColor(severityBounds(record).min)}, ${severityColor(
+                        severityBounds(record).max,
+                      )})`
+                    : severityColor(record.severity),
+                  color: severityTextColor(severityBounds(record).max),
+                }}
               >
-                {record.severity}
+                {formatSeverity(record)}
               </span>
               <span className="record-row__summary">{summarize(record)}</span>
               {!hasDetail(record) && <span className="record-row__unfilled-mark" title="詳細未記入" />}

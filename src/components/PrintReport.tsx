@@ -1,5 +1,13 @@
 import { useState } from 'react'
-import { DURATION_LABELS, QUALITY_LABELS, TRIGGER_LABELS, type PainRecord } from '../types'
+import {
+  DURATION_LABELS,
+  QUALITY_LABELS,
+  TRIGGER_LABELS,
+  formatSeverity,
+  type PainRecord,
+  severityMid,
+  severityPeak,
+} from '../types'
 import { formatDateJp, formatTime } from '../utils/date'
 import { hourlyDistribution, maxSeverityByDate } from '../utils/reviewStats'
 import { CalendarHeatmap } from './CalendarHeatmap'
@@ -28,13 +36,13 @@ function monthsInRange(records: PainRecord[]): { year: number; month: number }[]
 export function PrintReport({ records, startLabel, endLabel }: PrintReportProps) {
   const [createdAt] = useState(() => Date.now())
   const count = records.length
-  const avg = count ? records.reduce((s, r) => s + r.severity, 0) / count : 0
-  const max = count ? Math.max(...records.map((r) => r.severity)) : 0
+  const avg = count ? records.reduce((s, r) => s + severityMid(r), 0) / count : 0
+  const max = count ? Math.max(...records.map(severityPeak)) : 0
   const hourly = hourlyDistribution(records)
   const peakHour = hourly.reduce((best, cur) => (cur.count > best.count ? cur : best), hourly[0])
   const months = monthsInRange(records)
   const severe = records
-    .filter((r) => r.severity >= 7)
+    .filter((r) => severityPeak(r) >= 7)
     .slice()
     .sort((a, b) => a.timestamp - b.timestamp)
 
@@ -95,7 +103,7 @@ export function PrintReport({ records, startLabel, endLabel }: PrintReportProps)
                 <tr key={r.id}>
                   <td>{formatDateJp(r.timestamp)}</td>
                   <td>{formatTime(r.timestamp)}</td>
-                  <td>{r.severity}</td>
+                  <td>{formatSeverity(r)}</td>
                   <td>{r.duration ? DURATION_LABELS[r.duration] : ''}</td>
                   <td>{(r.qualities ?? []).map((q) => QUALITY_LABELS[q]).join('・')}</td>
                   <td>{(r.triggers ?? []).map((t) => TRIGGER_LABELS[t]).join('・')}</td>

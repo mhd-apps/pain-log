@@ -1,5 +1,5 @@
 import type { RecordPatch } from '../db'
-import type { PainRecord, Severity } from '../types'
+import { type PainRecord, type Severity, applySeverityTap, formatSeverity, severityBounds } from '../types'
 import { formatDateTimeJp } from '../utils/date'
 import { severityColor, severityTextColor } from '../utils/severityColor'
 import { DetailForm } from './DetailForm'
@@ -26,19 +26,30 @@ export function RecordEditSheet({ record, onUpdate, onDelete, onClose }: RecordE
           </button>
         </div>
 
-        <div className="sheet__severity-row">
-          {SEVERITIES.map((n) => (
-            <button
-              key={n}
-              type="button"
-              className={`sheet__severity-button${record.severity === n ? ' active' : ''}`}
-              style={{ background: severityColor(n), color: severityTextColor(n) }}
-              onClick={() => onUpdate({ severity: n })}
-            >
-              {n}
-            </button>
-          ))}
+        <div className="sheet__severity-label">
+          強さ {formatSeverity(record)}
         </div>
+        <div className="sheet__severity-row">
+          {SEVERITIES.map((n) => {
+            const { min, max } = severityBounds(record)
+            const isEnd = n === min || n === max
+            const isInside = n > min && n < max
+            return (
+              <button
+                key={n}
+                type="button"
+                className={`sheet__severity-button${isEnd ? ' active' : ''}${isInside ? ' inside' : ''}`}
+                style={{ background: severityColor(n), color: severityTextColor(n) }}
+                onClick={() => onUpdate((current) => applySeverityTap(current, n))}
+              >
+                {n}
+              </button>
+            )
+          })}
+        </div>
+        <p className="sheet__severity-hint">
+          2つの数字をタップすると「5〜7」のように幅で記録できます。端の数字をもう一度タップすると幅が外れます。
+        </p>
 
         <TimestampEditor
           title="日時（痛みがあった時刻に直せます）"

@@ -49,6 +49,43 @@
   transform: scale(0.94);
 }
 
+/* Endpoints of the range currently being recorded. */
+.severity-button.is-end {
+  outline: 4px solid var(--color-text);
+  outline-offset: -4px;
+}
+
+/* Numbers that fall inside the range, shown as included but not chosen. */
+.severity-button.is-inside {
+  outline: 3px dashed var(--color-text);
+  outline-offset: -7px;
+}
+
+.range-hint {
+  margin: 12px 2px 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.new-record-button {
+  margin-top: 22px;
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.new-record-button:active {
+  background: var(--color-surface-alt);
+}
+
 .severity-scale-labels {
   display: flex;
   justify-content: space-between;
