@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import type { RecordPatch } from '../db'
-import { type PainRecord, type Severity, applySeverityTap, formatSeverity, severityBounds } from '../types'
+import { type PainRecord, type Severity, formatSeverity, rangeFromTaps, severityBounds } from '../types'
 import { formatDateTimeJp } from '../utils/date'
 import { severityColor, severityTextColor } from '../utils/severityColor'
 import { DetailForm } from './DetailForm'
@@ -16,6 +17,18 @@ interface RecordEditSheetProps {
 }
 
 export function RecordEditSheet({ record, onUpdate, onDelete, onClose }: RecordEditSheetProps) {
+  // Same rule as the record screen: two taps decide the strength.
+  const [first, setFirst] = useState<Severity | null>(null)
+
+  function handleTap(severity: Severity) {
+    if (first === null) {
+      setFirst(severity)
+      return
+    }
+    onUpdate(rangeFromTaps(first, severity))
+    setFirst(null)
+  }
+
   return (
     <div className="sheet-backdrop" onClick={onClose}>
       <div className="sheet" onClick={(e) => e.stopPropagation()}>
@@ -27,20 +40,21 @@ export function RecordEditSheet({ record, onUpdate, onDelete, onClose }: RecordE
         </div>
 
         <div className="sheet__severity-label">
-          強さ {formatSeverity(record)}
+          {first === null ? `強さ ${formatSeverity(record)}` : `${first} を選びました。あと1つタップしてください`}
         </div>
         <div className="sheet__severity-row">
           {SEVERITIES.map((n) => {
             const { min, max } = severityBounds(record)
-            const isEnd = n === min || n === max
-            const isInside = n > min && n < max
+            const picked = first === n
+            const isEnd = first === null && (n === min || n === max)
+            const isInside = first === null && n > min && n < max
             return (
               <button
                 key={n}
                 type="button"
-                className={`sheet__severity-button${isEnd ? ' active' : ''}${isInside ? ' inside' : ''}`}
+                className={`sheet__severity-button${isEnd || picked ? ' active' : ''}${isInside ? ' inside' : ''}`}
                 style={{ background: severityColor(n), color: severityTextColor(n) }}
-                onClick={() => onUpdate((current) => applySeverityTap(current, n))}
+                onClick={() => handleTap(n)}
               >
                 {n}
               </button>
@@ -48,7 +62,7 @@ export function RecordEditSheet({ record, onUpdate, onDelete, onClose }: RecordE
           })}
         </div>
         <p className="sheet__severity-hint">
-          2つの数字をタップすると「5〜7」のように幅で記録できます。端の数字をもう一度タップすると幅が外れます。
+          強さを変えるときは数字を2つタップします。同じ数字を2回タップすると、その数値だけの記録になります。
         </p>
 
         <TimestampEditor

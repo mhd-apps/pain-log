@@ -141,32 +141,14 @@ export function severityMid(record: Pick<PainRecord, 'severity' | 'severityMax'>
 }
 
 /**
- * Applies a tap on `tapped` to the current selection. Tapping the value that is
- * already the whole selection keeps it single; tapping a different one widens to
- * a range; tapping an endpoint of an existing range collapses back to the other end.
+ * Severity is always chosen with two taps. Two different numbers make a range;
+ * the same number twice records that single value.
  */
-export function applySeverityTap(
-  current: Pick<PainRecord, 'severity' | 'severityMax'>,
-  tapped: Severity,
-): { severity: Severity; severityMax?: Severity } {
-  const { min, max, isRange } = severityBounds(current)
-
-  if (isRange) {
-    if (tapped === min) return { severity: max, severityMax: undefined }
-    if (tapped === max) return { severity: min, severityMax: undefined }
-    // Re-anchor: keep the far end, move the near one.
-    const keepMax = Math.abs(tapped - min) < Math.abs(tapped - max)
-    const other = keepMax ? max : min
-    return {
-      severity: Math.min(tapped, other) as Severity,
-      severityMax: Math.max(tapped, other) as Severity,
-    }
-  }
-
-  if (tapped === min) return { severity: min, severityMax: undefined }
+export function rangeFromTaps(first: Severity, second: Severity): { severity: Severity; severityMax?: Severity } {
+  if (first === second) return { severity: first, severityMax: undefined }
   return {
-    severity: Math.min(tapped, min) as Severity,
-    severityMax: Math.max(tapped, min) as Severity,
+    severity: Math.min(first, second) as Severity,
+    severityMax: Math.max(first, second) as Severity,
   }
 }
 
