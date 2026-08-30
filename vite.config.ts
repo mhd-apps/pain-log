@@ -14,6 +14,10 @@ export default defineConfig(({ command, isPreview }) => ({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Registration is done from src/main.tsx so the app can also re-check for
+      // updates when it is resumed — a home-screen PWA is suspended rather than
+      // closed, so a load-time-only check can leave it on an old version forever.
+      injectRegister: false,
       includeAssets: ['favicon.svg', 'icons/apple-touch-icon.png', 'icons/icon-192.png', 'icons/icon-512.png'],
       manifest: {
         name: '痛み日誌',
