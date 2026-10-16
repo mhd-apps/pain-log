@@ -13,7 +13,8 @@ import {
 import { formatDateJp, formatTime } from './date'
 
 function csvEscape(value: string): string {
-  if (/[",\n]/.test(value)) return `"${value.replace(/"/g, '""')}"`
+  // A multi-line memo has to stay quoted, or the newline ends the CSV row.
+  if (/[",\r\n]/.test(value)) return `"${value.replace(/"/g, '""')}"`
   return value
 }
 

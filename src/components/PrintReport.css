@@ -74,6 +74,11 @@
   font-size: 10px;
 }
 
+/* Keep the line breaks the user actually typed in the memo. */
+.print-report td.memo {
+  white-space: pre-wrap;
+}
+
 .print-report th,
 .print-report td {
   border: 1px solid #bbb;

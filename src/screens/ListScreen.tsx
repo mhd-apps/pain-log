@@ -22,7 +22,8 @@ function summarize(record: PainRecord): string {
   const parts: string[] = []
   if (record.duration) parts.push(DURATION_LABELS[record.duration])
   if (record.qualities?.length) parts.push(record.qualities.map((q) => QUALITY_LABELS[q]).join('・'))
-  if (record.memo) parts.push(record.memo)
+  // The row is a single clipped line, so a multi-line memo is flattened for the preview.
+  if (record.memo) parts.push(record.memo.replace(/\s*\n+\s*/g, ' '))
   return parts.join(' / ')
 }
 

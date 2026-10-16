@@ -107,7 +107,7 @@ export function PrintReport({ records, startLabel, endLabel }: PrintReportProps)
                   <td>{r.duration ? DURATION_LABELS[r.duration] : ''}</td>
                   <td>{(r.qualities ?? []).map((q) => QUALITY_LABELS[q]).join('・')}</td>
                   <td>{(r.triggers ?? []).map((t) => TRIGGER_LABELS[t]).join('・')}</td>
-                  <td>{r.memo ?? ''}</td>
+                  <td className="memo">{r.memo ?? ''}</td>
                 </tr>
               ))}
             </tbody>

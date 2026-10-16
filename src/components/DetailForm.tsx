@@ -173,13 +173,14 @@ export function DetailForm({ record, onUpdate }: DetailFormProps) {
       )}
 
       <div className="field-block">
-        <h3>メモ（一行）</h3>
-        <input
-          className="text-input"
+        <h3>メモ</h3>
+        <textarea
+          className="text-input text-input--memo"
           value={memo}
+          rows={3}
           onChange={(e) => setMemo(e.target.value)}
           onBlur={commitMemo}
-          placeholder="気になったことを一行で"
+          placeholder="気になったことを自由に（改行できます）"
         />
       </div>
     </div>
