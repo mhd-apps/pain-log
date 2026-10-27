@@ -41,8 +41,10 @@ export function PrintReport({ records, startLabel, endLabel }: PrintReportProps)
   const hourly = hourlyDistribution(records)
   const peakHour = hourly.reduce((best, cur) => (cur.count > best.count ? cur : best), hourly[0])
   const months = monthsInRange(records)
-  const severe = records
-    .filter((r) => severityPeak(r) >= 7)
+  // Worth showing the doctor: the strong episodes, plus anything the user took the
+  // trouble to write a note about — including a 0, where the note is the whole point.
+  const notable = records
+    .filter((r) => severityPeak(r) >= 7 || Boolean(r.memo))
     .slice()
     .sort((a, b) => a.timestamp - b.timestamp)
 
@@ -82,8 +84,8 @@ export function PrintReport({ records, startLabel, endLabel }: PrintReportProps)
           ))}
         </div>
 
-        <p className="print-report__section-title">強い痛み（強さ7以上）の記録</p>
-        {severe.length === 0 ? (
+        <p className="print-report__section-title">強い痛み（強さ7以上）とメモのある記録</p>
+        {notable.length === 0 ? (
           <p>該当する記録はありません</p>
         ) : (
           <table>
@@ -99,7 +101,7 @@ export function PrintReport({ records, startLabel, endLabel }: PrintReportProps)
               </tr>
             </thead>
             <tbody>
-              {severe.map((r) => (
+              {notable.map((r) => (
                 <tr key={r.id}>
                   <td>{formatDateJp(r.timestamp)}</td>
                   <td>{formatTime(r.timestamp)}</td>

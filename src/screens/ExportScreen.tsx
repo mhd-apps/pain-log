@@ -75,7 +75,7 @@ export function ExportScreen({ records }: ExportScreenProps) {
           PDFを作成 / 印刷する
         </button>
         <p className="export-hint">
-          印刷ダイアログが開きます。「PDFに保存」を選ぶとA4サイズのPDFとして保存できます。サマリー・カレンダー・強い痛み（強さ7以上）の記録がまとまります。
+          印刷ダイアログが開きます。「PDFに保存」を選ぶとA4サイズのPDFとして保存できます。サマリー・カレンダーのほか、強い痛み（強さ7以上）とメモを書いた記録が一覧になります。
         </p>
       </div>
 
