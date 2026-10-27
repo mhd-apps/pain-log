@@ -68,15 +68,36 @@
   border-radius: 4px;
 }
 
+.print-report .print-report__section-note {
+  font-size: 10px;
+  color: #444;
+  margin: 0 0 6px;
+}
+
 .print-report table {
   width: 100%;
   border-collapse: collapse;
   font-size: 10px;
 }
 
+/* The table may now run over several pages: repeat the header on each one and
+   never split a single record across a page break. */
+.print-report thead {
+  display: table-header-group;
+}
+
+.print-report tr {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
 /* Keep the line breaks the user actually typed in the memo. */
 .print-report td.memo {
   white-space: pre-wrap;
+}
+
+.print-report td.medication {
+  white-space: nowrap;
 }
 
 .print-report th,

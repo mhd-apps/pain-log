@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {
   DURATION_LABELS,
   QUALITY_LABELS,
+  RELIEF_LABELS,
   TRIGGER_LABELS,
   formatSeverity,
   type PainRecord,
@@ -33,6 +34,13 @@ function monthsInRange(records: PainRecord[]): { year: number; month: number }[]
   return result.sort((a, b) => (a.year - b.year) || (a.month - b.month))
 }
 
+function formatMedication(record: PainRecord): string {
+  const medication = record.medication
+  if (!medication) return ''
+  if (!medication.taken) return '飲んでいない'
+  return medication.relief ? `飲んだ（${RELIEF_LABELS[medication.relief]}）` : '飲んだ'
+}
+
 export function PrintReport({ records, startLabel, endLabel }: PrintReportProps) {
   const [createdAt] = useState(() => Date.now())
   const count = records.length
@@ -41,10 +49,11 @@ export function PrintReport({ records, startLabel, endLabel }: PrintReportProps)
   const hourly = hourlyDistribution(records)
   const peakHour = hourly.reduce((best, cur) => (cur.count > best.count ? cur : best), hourly[0])
   const months = monthsInRange(records)
-  // Worth showing the doctor: the strong episodes, plus anything the user took the
-  // trouble to write a note about — including a 0, where the note is the whole point.
+  // Worth showing the doctor: the strong episodes, anything the user took the trouble
+  // to write a note about (including a 0, where the note is the whole point), and every
+  // time a rescue dose was taken — that is what the prescription gets judged on.
   const notable = records
-    .filter((r) => severityPeak(r) >= 7 || Boolean(r.memo))
+    .filter((r) => severityPeak(r) >= 7 || Boolean(r.memo) || r.medication?.taken === true)
     .slice()
     .sort((a, b) => a.timestamp - b.timestamp)
 
@@ -84,7 +93,10 @@ export function PrintReport({ records, startLabel, endLabel }: PrintReportProps)
           ))}
         </div>
 
-        <p className="print-report__section-title">強い痛み（強さ7以上）とメモのある記録</p>
+        <p className="print-report__section-title">詳しい記録</p>
+        <p className="print-report__section-note">
+          強さ7以上のもの、メモを書いたもの、頓服を飲んだものを時系列で並べています
+        </p>
         {notable.length === 0 ? (
           <p>該当する記録はありません</p>
         ) : (
@@ -97,6 +109,7 @@ export function PrintReport({ records, startLabel, endLabel }: PrintReportProps)
                 <th>持続時間</th>
                 <th>性質</th>
                 <th>前後の状況</th>
+                <th>頓服</th>
                 <th>メモ</th>
               </tr>
             </thead>
@@ -109,6 +122,7 @@ export function PrintReport({ records, startLabel, endLabel }: PrintReportProps)
                   <td>{r.duration ? DURATION_LABELS[r.duration] : ''}</td>
                   <td>{(r.qualities ?? []).map((q) => QUALITY_LABELS[q]).join('・')}</td>
                   <td>{(r.triggers ?? []).map((t) => TRIGGER_LABELS[t]).join('・')}</td>
+                  <td className="medication">{formatMedication(r)}</td>
                   <td className="memo">{r.memo ?? ''}</td>
                 </tr>
               ))}
